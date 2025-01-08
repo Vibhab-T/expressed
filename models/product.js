@@ -12,8 +12,9 @@ const getProductsFromFile = (callback) => {
 	fs.readFile(filePath, (err, fileContent) => {
 		if (err) {
 			callback([]);
+		} else {
+			callback(JSON.parse(fileContent));
 		}
-		callback(JSON.parse(fileContent));
 	});
 };
 
@@ -40,7 +41,7 @@ module.exports = class Product {
 
 	static fetchById(id, callback) {
 		getProductsFromFile((products) => {
-			const product = products.find((prod) => prod.id === id);
+			const product = products.find((prod) => prod.id === String(id));
 			callback(product);
 		});
 	}
