@@ -11,6 +11,7 @@ exports.postProductAndRedirect = (req, res, next) => {
 	const product = new Product(
 		req.body.productTitle,
 		req.body.productPrice,
+		req.body.productUrl,
 		req.body.productDescription
 	);
 	product.save();
@@ -48,8 +49,8 @@ exports.getDetails = (req, res, next) => {
 	const prodId = req.params.productId;
 	Product.fetchById(prodId, (product) => {
 		res.render('shop/product-details', {
-			docTitle: `${product.title}`,
-			prods: product,
+			docTitle: product.title,
+			product: product,
 			path: 'productDetails',
 		});
 	});
