@@ -7,7 +7,7 @@
             <%- include('../includes/nav.ejs') %>
 		<main>
 			<% if (editing) { %>
-				<form class="product-form" action="/admin/edit-product/<%= product.id %>" method="POST">
+				<form class="product-form" action="/admin/edit-product/" method="POST">
 					<div class="form-control">
 						<label for="productTitle">Product Title:</label>
 						<input type="text" name="productTitle" id="productTitle" value="<%= product.title %>"/>
@@ -17,6 +17,7 @@
 						<input type="text" name="productUrl" id="productUrl" value="<%= product.url %>">
 						<label for="productDescription">Product Description: </label>
 						<input type="text" name="productDescription" id="productDescription" value="<%= product.description %>" />
+						<input type="hidden" name="productId" id="productId" value="<%= product.id %>">
 					</div>
 					<button type="submit" class="btn">Edit Product</button>
 				</form>
