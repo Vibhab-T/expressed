@@ -19,9 +19,12 @@ app.set('views', 'views');
 
 app.listen(3000);
 
-app.use(bodyParser.urlencoded());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/admin', adminRoutes);
 app.use(userRoutes);
 app.use(errorController.getErrorPage404);
+
+console.log('server running on port 3000');
