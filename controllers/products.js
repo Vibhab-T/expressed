@@ -100,3 +100,9 @@ exports.getAdminProductsList = (req, res, next) => {
 		});
 	});
 };
+
+exports.postDeleteProduct = (req, res, next) => {
+	prodId = req.params.productId;
+	Product.deleteProduct(prodId);
+	res.redirect('/admin/products');
+};
