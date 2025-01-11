@@ -57,13 +57,7 @@ module.exports = class Product {
 
 	static deleteProduct(id) {
 		getProductsFromFile((products) => {
-			const productIndex = products.findIndex((prod) => prod.id === id);
-			const updatedProducts = [];
-			for (let i = 0; i < products.length; i++) {
-				if (i != productIndex) {
-					updatedProducts.push(products[i]);
-				}
-			}
+			const updatedProducts = products.filter((prod) => prod.id !== id);
 			fs.writeFile(filePath, JSON.stringify(updatedProducts), (err) =>
 				console.log(err)
 			);
