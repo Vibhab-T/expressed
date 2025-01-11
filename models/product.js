@@ -2,6 +2,8 @@ const fs = require('fs');
 const { get } = require('https');
 const path = require('path');
 
+const Cart = require('./cart');
+
 const filePath = path.join(
 	path.dirname(process.mainModule.filename),
 	'data',
@@ -12,6 +14,7 @@ const getProductsFromFile = (callback) => {
 	fs.readFile(filePath, (err, fileContent) => {
 		if (err) {
 			callback([]);
+			return;
 		} else {
 			callback(JSON.parse(fileContent));
 		}
@@ -44,6 +47,18 @@ module.exports = class Product {
 		});
 	}
 
+	static deleteById(id) {
+		getProductsFromFile((products) => {
+			const product = products.find((prod) => prod.id === id);
+			const updatedProducts = products.filter((prod) => prod.id !== id);
+			fs.writeFile(filePath, JSON.stringify(updatedProducts), (err) => {
+				if (!err) {
+					Cart.deleteProduct(id, product.price);
+				}
+			});
+		});
+	}
+
 	static fetchAll(callback) {
 		getProductsFromFile(callback);
 	}
@@ -52,15 +67,6 @@ module.exports = class Product {
 		getProductsFromFile((products) => {
 			const product = products.find((prod) => prod.id === String(id));
 			callback(product);
-		});
-	}
-
-	static deleteProduct(id) {
-		getProductsFromFile((products) => {
-			const updatedProducts = products.filter((prod) => prod.id !== id);
-			fs.writeFile(filePath, JSON.stringify(updatedProducts), (err) =>
-				console.log(err)
-			);
 		});
 	}
 };
