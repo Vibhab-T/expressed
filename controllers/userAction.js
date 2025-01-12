@@ -2,7 +2,22 @@ const Product = require('../models/product');
 const Cart = require('../models/cart');
 
 exports.getCart = (req, res, next) => {
-	res.render('shop/cart', { docTitle: 'Cart', path: 'cart' });
+	Cart.getCart((cart) => {
+		Product.fetchAll((products) => {
+			const cartProducts = [];
+			for (let product of products) {
+				const inCart = cart.products.find((prod) => prod.id === product.id);
+				if (inCart) {
+					cartProducts.push({ productData: product, qty: inCart.qty });
+				}
+			}
+			res.render('shop/cart', {
+				docTitle: 'Cart',
+				path: 'cart',
+				products: cartProducts,
+			});
+		});
+	});
 };
 
 exports.postCart = (req, res, next) => {

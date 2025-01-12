@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { isNull } = require('util');
 
 const filePath = path.join(
 	path.dirname(process.mainModule.filename),
@@ -53,6 +54,17 @@ module.exports = class Cart {
 			fs.writeFile(filePath, JSON.stringify(updatedCart), (err) =>
 				console.log(err)
 			);
+		});
+	}
+
+	static getCart(callback) {
+		fs.readFile(filePath, (err, fileContent) => {
+			const cart = JSON.parse(fileContent);
+			if (err) {
+				callback(null);
+			} else {
+				callback(cart);
+			}
 		});
 	}
 };
