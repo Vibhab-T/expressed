@@ -16,10 +16,10 @@
                                                         <input type="hidden" name="productId" id="productId" value="<%= product.productData.id %>">
                                                         <button type="submit" class="btn">Delete</button>
                                                 </form>
-                                                        
                                         </li>
                                 <% } %>
                         </ul>
+                        <h2>Total Price: $<%= cart.totalPrice %></h2>
 
                 <% } else { %>
                         <h1>No Products In Cart</h1>

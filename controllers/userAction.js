@@ -15,6 +15,7 @@ exports.getCart = (req, res, next) => {
 				docTitle: 'Cart',
 				path: 'cart',
 				products: cartProducts,
+				cart: cart,
 			});
 		});
 	});
