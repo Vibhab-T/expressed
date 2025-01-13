@@ -16,8 +16,12 @@ exports.postProductAndRedirect = (req, res, next) => {
 		req.body.productUrl,
 		req.body.productDescription
 	);
-	product.save();
-	res.redirect('product-added');
+	product
+		.save()
+		.then(() => {
+			res.redirect('product-added');
+		})
+		.catch((err) => console.log(err));
 };
 
 exports.getProductAdded = (req, res, next) => {
@@ -33,14 +37,16 @@ exports.getEditProduct = (req, res, next) => {
 		res.redirect('/');
 	}
 	prodId = req.params.productId;
-	Product.fetchById(prodId, (product) => {
-		res.render('admin/edit-product', {
-			docTitle: 'Edit Product',
-			path: 'editProduct',
-			product: product,
-			editing: editMode,
-		});
-	});
+	Product.fetchById(prodId)
+		.then(([product]) => {
+			res.render('admin/edit-product', {
+				docTitle: 'Edit Product',
+				path: 'editProduct',
+				product: product[0],
+				editing: editMode,
+			});
+		})
+		.catch((err) => console.log(err));
 };
 
 exports.postEditProduct = (req, res, next) => {
@@ -61,44 +67,52 @@ exports.postEditProduct = (req, res, next) => {
 };
 
 exports.getShop = (req, res, next) => {
-	Product.fetchAll((products) => {
-		res.render('shop/index', {
-			prods: products,
-			docTitle: 'Shop',
-			path: 'shop',
-		});
-	});
+	Product.fetchAll()
+		.then(([rows, fieldData]) => {
+			res.render('shop/index', {
+				prods: rows,
+				docTitle: 'Shop',
+				path: 'shop',
+			});
+		})
+		.catch((err) => console.log(err));
 };
 
 exports.getProductsList = (req, res, next) => {
-	Product.fetchAll((products) => {
-		res.render('shop/products-list', {
-			prods: products,
-			docTitle: 'Product Lists',
-			path: 'productsList',
-		});
-	});
+	Product.fetchAll()
+		.then(([rows, fieldData]) => {
+			res.render('shop/products-list', {
+				prods: rows,
+				docTitle: 'Products List',
+				path: 'productsList',
+			});
+		})
+		.catch((err) => console.log(err));
 };
 
 exports.getDetails = (req, res, next) => {
 	const prodId = req.params.productId;
-	Product.fetchById(prodId, (product) => {
-		res.render('shop/product-details', {
-			docTitle: product.title,
-			product: product,
-			path: 'productDetails',
-		});
-	});
+	Product.fetchById(prodId)
+		.then(([product]) => {
+			res.render('shop/product-details', {
+				docTitle: product.title,
+				product: product[0],
+				path: 'productDetails',
+			});
+		})
+		.catch((err) => console.log(err));
 };
 
 exports.getAdminProductsList = (req, res, next) => {
-	Product.fetchAll((products) => {
-		res.render('admin/products', {
-			prods: products,
-			docTitle: 'Admin Product Lists',
-			path: 'adminProduct',
-		});
-	});
+	Product.fetchAll()
+		.then(([rows]) => {
+			res.render('admin/products', {
+				prods: rows,
+				docTitle: 'Admin Product Lists',
+				path: 'adminProduct',
+			});
+		})
+		.catch((err) => console.log(err));
 };
 
 exports.postDeleteProduct = (req, res, next) => {
