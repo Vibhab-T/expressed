@@ -6,7 +6,7 @@ const path = require('path');
 const adminRoutes = require('./routes/admin');
 const userRoutes = require('./routes/shop');
 const errorController = require('./controllers/error');
-const db = require('./utility/database');
+const sequelize = require('./utility/database');
 
 const app = express();
 
@@ -18,8 +18,6 @@ const app = express();
 app.set('view engine', 'ejs'); //ejs init
 app.set('views', 'views');
 
-app.listen(3000);
-
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -28,4 +26,13 @@ app.use('/admin', adminRoutes);
 app.use(userRoutes);
 app.use(errorController.getErrorPage404);
 
-console.log('server running on port 3000');
+sequelize
+	.sync()
+	.then((result) => {
+		//console.log(result);
+		console.log('server running on port 3000');
+		app.listen(3000);
+	})
+	.catch((error) => {
+		console.log(err);
+	});
